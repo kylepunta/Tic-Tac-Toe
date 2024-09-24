@@ -20,17 +20,10 @@ const displayController = (function () {
 
 console.log(displayController.displayBoard(gameBoard.boardArray));
 
-function createPlayerX (name) {
-    const playerOneName = name;
-    const playerOneLetter = "X";
-    return { playerOneName, playerOneLetter };
+function createPlayer (name) {
+    const playerName = name;
+    return { playerName };
 };
 
-function createPlayerO (name) {
-    const playerTwoName = name;
-    const playerTwoLetter = "O";
-    return { playerTwoName, playerTwoLetter };
-};
-
-const playerOne = createPlayerX(prompt("Enter player one name: "));
-const playerTwo = createPlayerO(prompt("Enter player two name: "));
+const playerOne = createPlayer("Player X");
+const playerTwo = createPlayer("Player O");
