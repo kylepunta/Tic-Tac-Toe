@@ -1,3 +1,5 @@
+// Name: Kyle Purcell
+
 const createGameBoard = (function(){
         const board = document.querySelector('.board');
         for (let i = 0; i < 3; i++){

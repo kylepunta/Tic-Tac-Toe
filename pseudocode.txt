@@ -1,0 +1,34 @@
+Tic Tac Toe
+
+Requirements:
+    3x3 grid of squares
+    Two players: X and O
+    Alternate turns
+    Determine if the game is a win or draw and display the result
+    Reset/replay the game after result
+
+Game Logic:
+    Multi-dimensional array for storing each letter
+    Alternate turns between players
+    Check winning conditions and check for a draw
+
+Game Flow:
+    Click on a square
+    Check if square is empty
+    If square is empty, insert letter
+    Check for a win/draw
+    If result, display
+    Else, switch turn
+
+Objects:
+    createGameBoard(): Creates the multi-dimensional array for storing each letter
+    displayController(): A display controller for displaying the board and updating the UI
+    gameController(): A game controller for controlling the game flow
+    createPlayer(name, letter): Creates a new player object
+    gameLogic(): Controls the game logic; checks for a win or draw
+
+Functions:
+    checkWin()
+    checkTie()
+    handleClick()
+
