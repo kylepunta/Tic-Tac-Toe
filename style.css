@@ -1,14 +1,21 @@
+body {
+    background-color: #FFF5F5;
+}
+
 .container {
     min-height: 100vh;
     display: grid;
-    grid-template-areas: "player-one board player-two";
+    grid-template-areas: 
+    "player-one board player-two"
+    "player-one start-game player-two";
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 620px 100px;
 }
 
 .board {
     height: 600px;
     width: 600px;
-    border: 4px solid gray;
+    border: 4px solid #ff8989;
     display: grid;
     grid-template-areas: 
     "square square square"
@@ -22,12 +29,14 @@
 .square {
     min-height: 40px;
     min-width: 40px;
-    border: 4px solid gray;
+    border: 4px solid #ffa8a8;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     justify-items: center;
     align-items: center;
+    font-size: 60px;
+    color: #500;
 }
 
 .game-heading {
@@ -64,7 +73,7 @@
 
 form {
     color: #444;
-    display: grid;
+    /* display: grid; */
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     margin-left: 102px;
@@ -73,18 +82,27 @@ form {
 label {
     padding-right: 8px;
     grid-area: 1 / 1 / 2 / 2;
+    font-size: 18px;
 }
 
 input {
     grid-area: 1 / 2 / 2 / 3;
+    width: 148px;
+    font-size: 16px;
+    padding: 4px 4px 4px 8px;
+    border: 1px solid #CACACA;
+    border-radius: 6px;
 }
 
 button {
     grid-area: 2 / 1 / 3 / 3;
     padding: 10px 60px;
     font-size: 16px;
-    margin-top: 26px;
+    margin-top: 18px;
     margin-left: 62px;
+    border: 2px solid #CACACA;
+    border-radius: 10px;
+    background-color: #FFF;
 }
 
 .score-container {
@@ -94,18 +112,172 @@ button {
 }
 
 .score-heading {
-    margin-top: 16px;
+    margin-top: 0px;
     margin-bottom: 16px;
-    font-size: 22px;
-    color: #444;
+    font-size: 24px;
+    /* color: #444; */
 }
 
-.score {
-    font-size: 19px;
+.player-one-score,
+.player-two-score {
+    font-size: 24px;
     padding-left: 8px;
     color: #444;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .win {
     background-color: #afffaf;
+}
+
+.player-one h2,
+.player-two h2 {
+    text-align: center;
+    color: #444;
+}
+
+.name {
+
+}
+
+.letter {
+    text-align: center;
+    font-size: 40px;
+    margin: 20px;
+    color: #444;
+}
+
+.name-heading {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.player-one-name {
+    font-size: 24px;
+    color: #444;
+    /* margin-top: 16px; */
+    margin-left: 8px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.letter-heading {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.player-one-letter {
+    font-size: 24px;
+    color: #444;
+    /* margin-top: 16px; */
+    margin-left: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.new-player-one {
+    grid-area: player-one;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: repeat(4, 76px);
+    justify-content: center;
+    margin-left: 6px;
+    width: 290px;
+    height: 384px;
+    justify-self: center;
+    box-sizing: border-box;
+    padding-left: 30px;
+    padding-top: 52px;
+}
+
+.name-heading,
+.letter-heading,
+.turn-heading {
+    font-size: 24px;;
+}
+
+.turn-heading {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.player-one-turn {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #444;
+    border-radius: 60px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.new-player-two {
+    grid-area: player-two;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: repeat(4, 76px);
+    justify-content: center;
+    margin-left: 6px;
+    width: 290px;
+    height: 384px;
+    justify-self: center;
+    box-sizing: border-box;
+    padding-left: 30px;
+    padding-top: 52px;
+}
+
+.player-two-name {
+    font-size: 24px;
+    color: #444;
+    /* margin-top: 16px; */
+    margin-left: 8px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.player-two-letter {
+    font-size: 24px;
+    color: #444;
+    /* margin-top: 16px; */
+    margin-left: 10px;
+    margin-top: 0px;
+}
+
+.player-two-turn {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #444;
+    border-radius: 60px;
+    margin-top: 6px;
+    margin-left: 2px;
+}
+
+.new-player-one,
+.new-player-two {
+    border: 2px solid #ffa1a1;
+    border-radius: 20px;
+    background-color: #FFE3E3;
+    /* padding-left: 30px;
+    padding-bottom: 8px; */
+}
+
+.start-game {
+    grid-area: start-game;
+    display: grid;
+    justify-content: center;
+}
+
+.start-game button {
+    margin-left: 0px;
+    border: 2px solid #CACACA;
+    border-radius: 10px;
+}
+
+.current-turn {
+    background-color: #afffaf;
+}
+
+.win-display {
+    margin-left: 28px;
+    color: #444;
 }

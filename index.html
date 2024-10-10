@@ -7,6 +7,41 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+    <header>
+        <h1 class="game-heading">Tic Tac Toe</h1>
+    </header>
+    <div class="container">
+        <div class="board"></div>
+        <div class="player-one">
+            <div>
+                <h2>Player One</h2>
+                <p class="letter">X</p>
+            </div>
+            <form action="">
+                <div class="name">
+                    <label for="player-one-name">Enter Name:</label>
+                    <input type="text" id="player-one-name">
+                </div>
+                <div><button class="player-one-button" type="submit">Enter</button></div>
+            </form>
+        </div>
+        <div class="player-two">
+            <div>
+                <h2>Player Two</h2>
+                <p class="letter">O</p>
+            </div>
+            <form action="">
+                <div class="name">
+                    <label for="player-two-name">Enter Name:</label>
+                    <input type="text" id="player-two-name">
+                </div>
+                <div><button class="player-two-button" type="submit">Enter</button></div>
+            </form>
+        </div>
+        <div class="start-game">
+            <button class="start-game-button">Start Game</button>
+        </div>
+    </div>
     <script src="./script.js"></script>
 </body>
 </html>
