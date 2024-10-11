@@ -14,108 +14,106 @@ const createGameBoard = (function(){
 })();
 
 function createPlayer(playerName, playerLetter){
-        const name = playerName;
-        const letter = playerLetter;
-        let score = 0;
-        return { name, letter, score };
+        return { playerName, playerLetter, score: 0 };
+};
+
+const gameState = {
+        board: [
+                [null, null, null],
+                [null, null, null],
+                [null ,null ,null],
+        ],
+        currentLetter: 'X',
+        turn: 1,
+        win: false,
+        tie: false,
+        players: {
+                playerOne: null,
+                playerTwo: null
+        }
+};
+
+function resetGameState(){
+        gameState.board = [
+                [null, null, null],
+                [null, null, null],
+                [null, null, null]
+        ];
+        gameState.currentLetter = 'X';
+        gameState.turn = 1;
+        gameState.win = false;
+        gameState.tie = false;
 };
 
 const gameLogic = (function() {
-        const boardArray = [
-                [null, null, null],
-                [null, null, null],
-                [null, null, null],
-        ];
-        let isEmpty = true;
-        let win = false;
-        let tie = false;
-        let currentLetter = "X";
-        let turn = 1;
+        function checkEmpty(rowIndex, colIndex){
+                return gameState.board[rowIndex][colIndex] == null;
+        };
 
-        function checkEmpty(rowIndex, columnIndex){
-                isEmpty = true;
-                if (boardArray[rowIndex][columnIndex] != null){
-                        isEmpty = false;
-                }
-                return isEmpty;
+        function checkThreeEqual(a, b, c){
+                return a != null && a === b && a === c;
         };
 
         function checkWin(){
                 // Row Check
-                for (let i = 0; i < boardArray.length; i++){
-                        if (boardArray[i][0] != null && boardArray[i][0] === boardArray[i][1] && boardArray[i][0] === boardArray[i][2]){
-                                win = true;
+                for (let i = 0; i < gameState.board.length; i++){
+                        if (checkThreeEqual(gameState.board[i][0], gameState.board[i][1], gameState.board[i][2])){
+                                gameState.win = true;
                         }
                 }
                 // Column check
-                for (let i = 0; i < boardArray.length; i++){
-                        if (boardArray[0][i] != null && boardArray[0][i] === boardArray[1][i] && boardArray[0][i] === boardArray[2][i]){
-                                win = true;
+                for (let i = 0; i < gameState.board.length; i++){
+                        if (checkThreeEqual(gameState.board[0][i], gameState.board[1][i], gameState.board[2][i])){
+                                gameState.win = true;
                         }
                 }
                 // Main diagonal check
-                if (boardArray[0][0] != null && boardArray[0][0] === boardArray[1][1] && boardArray[0][0] === boardArray[2][2]){
-                        win = true;
+                if (checkThreeEqual(gameState.board[0][0], gameState.board[1][1], gameState.board[2][2])){
+                        gameState.win = true;
                 }
                 // Anti diagonal check
-                if (boardArray[0][2] != null && boardArray[0][2] === boardArray[1][1] && boardArray[0][2] === boardArray[2][0]){
-                        win = true;
+                if (checkThreeEqual(gameState.board[0][2], gameState.board[1][1], gameState.board[2][0])){
+                        gameState.win = true;
                 }
-                return win;
+                return gameState.win;
         };
 
         function checkTie(){
-                if (!win && turn > 9){
-                        tie = true;
+                if (!gameState.win && gameState.turn > 9){
+                        gameState.tie = true;
                 };
-                return tie;
+                return gameState.tie;
         };
 
         function insertLetter(rowIndex, colIndex, square){
-                boardArray[rowIndex][colIndex] = currentLetter;
-                square.textContent = currentLetter;
-                currentLetter = currentLetter === "X" ? "O" : "X";
-                turn++;
-        };
-
-        function resetGameLogic(){
-                for (let i = 0; i < boardArray.length; i++){
-                        for (let j = 0; j < boardArray[i].length; j++){
-                                boardArray[i][j] = null;
-                        }
-                }
-                const squares = document.querySelectorAll('.square');
-                for (const square of squares) {
-                        square.textContent = '';
-                }
-                const markerOne = document.querySelector('.player-one-turn');
-                const markerTwo = document.querySelector('.player-two-turn');        
-                if (gameLogic.getCurrentLetter() === "O"){
-                        markerTwo.classList.remove('current-turn');
-                        markerOne.classList.add('current-turn');
-                }
-                isEmpty = true;
-                win = false;
-                tie = false;
-                currentLetter = "X";
-                turn = 1;
+                gameState.board[rowIndex][colIndex] = gameState.currentLetter;
+                square.textContent = gameState.currentLetter;
+                gameState.currentLetter = gameState.currentLetter === "X" ? "O" : "X";
+                gameState.turn++;
         };
 
         function getCurrentLetter(){
-                return currentLetter;
+                return gameState.currentLetter;
         };
-        return {checkEmpty, checkWin, checkTie, insertLetter, resetGameLogic, getCurrentLetter}
+        return {checkEmpty, checkWin, checkTie, insertLetter, getCurrentLetter}
 })();
 
 const gameController = (function(){
+        let playerOne;
+        let playerTwo;
+        
         function startGame(){
                 displayController.init();
+                gameState.players.playerOne = playerOne;
+                gameState.players.playerTwo = playerTwo;
                 const markerOne = document.querySelector('.player-one-turn');
                 markerOne.classList.add('current-turn');
         };
         function resetGame(){
                 displayController.init();
-                gameLogic.resetGameLogic();
+                resetGameState();
+                displayController.resetUI();
+                displayController.resetMarkers();
         };
         return {startGame, resetGame};
 })();
@@ -137,6 +135,37 @@ const displayController = (function(){
                 }
         };
 
+        function resetUI(){
+                squares.forEach((square) => square.textContent = '');
+                startGameContainer.innerHTML = '';
+        };
+
+        function resetMarkers(){
+                const markerOne = document.querySelector('.player-one-turn');
+                const markerTwo = document.querySelector('.player-two-turn');        
+                if (gameLogic.getCurrentLetter() === "O"){
+                        markerTwo.classList.remove('current-turn');
+                        markerOne.classList.add('current-turn');
+                }
+        };
+
+        function displayResult(message){
+                disableBoard();
+                const resultDisplay = document.createElement('h2');
+                resultDisplay.classList.add('win-display');
+                resultDisplay.textContent = message;
+                startGameContainer.appendChild(resultDisplay);
+
+                const playAgainBtn = document.createElement('button');
+                playAgainBtn.classList.add('play-again-button');
+                playAgainBtn.textContent = "Play Again";
+                playAgainBtn.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        gameController.resetGame();
+                });
+                startGameContainer.appendChild(playAgainBtn);
+        };
+
         function handleClick(square){
                 const rowIndex = parseInt(square.getAttribute('data-row-index'));
                 const colIndex = parseInt(square.getAttribute('data-column-index'));
@@ -149,47 +178,18 @@ const displayController = (function(){
                         gameLogic.insertLetter(rowIndex, colIndex, square);
                         if (gameLogic.checkWin()){
                                 console.log("Win!");
-                                disableBoard();
-                                const resultDisplay = document.createElement('h2');
-                                resultDisplay.classList.add('win-display');
-                                if (gameLogic.getCurrentLetter() === "O"){
-                                        resultDisplay.textContent = "Player X wins!";
-                                        playerOne.score++;
-                                        playerOneScore.textContent = playerOne.score;
+                                displayResult(`Player ${gameState.currentLetter === 'X' ? 'O' : 'X'} wins!`);
+                                if (gameLogic.getCurrentLetter() === 'O'){
+                                        gameController.playerOne.score++;
+                                        playerOneScore.textContent = gameController.playerOne.score;
                                 }
                                 else {
-                                        resultDisplay.textContent = "Player O wins!";
-                                        playerTwo.score++;
-                                        playerTwoScore.textContent = playerTwo.score;
+                                        gameController.playerTwo.score++;
+                                        playerTwoScore.textContent = gameController.playerTwo.score;
                                 }
-                                startGameContainer.appendChild(resultDisplay);
-
-                                const playAgainBtn = document.createElement('button');
-                                playAgainBtn.classList.add('play-again-button');
-                                playAgainBtn.textContent = "Play Again";
-                                playAgainBtn.addEventListener('click', (event) => {
-                                        event.preventDefault();
-                                        startGameContainer.innerHTML = '';
-                                        gameController.resetGame();
-                                });
-                                startGameContainer.appendChild(playAgainBtn);
                         }
                         else if (gameLogic.checkTie()){
-                                console.log("Tie!");
-                                const resultDisplay = document.createElement('h2');
-                                resultDisplay.classList.add('result-display');
-                                resultDisplay.textContent = "It's a tie!";
-                                startGameContainer.appendChild(resultDisplay);
-
-                                const playAgainBtn = document.createElement('button');
-                                playAgainBtn.classList.add('play-again-button');
-                                playAgainBtn.textContent = "Play Again";
-                                playAgainBtn.addEventListener('click', (event) => {
-                                        event.preventDefault();
-                                        startGameContainer.innerHTML = '';
-                                        gameController.resetGame();
-                                });
-                                startGameContainer.appendChild(playAgainBtn);
+                                displayResult("It's a tie!");
                         }
                         if (gameLogic.getCurrentLetter() === "X"){
                                 markerOne.classList.add('current-turn');
@@ -208,7 +208,7 @@ const displayController = (function(){
         playerOneBtn.addEventListener('click', function(event){
                 event.preventDefault();
                 const playerOneName = document.getElementById('player-one-name').value;
-                playerOne = createPlayer(playerOneName, "X");
+                gameController.playerOne = createPlayer(playerOneName, "X");
 
                 const playerOneContainer = document.querySelector('.player-one');
                 playerOneContainer.innerHTML = '';
@@ -251,7 +251,7 @@ const displayController = (function(){
         playerTwoBtn.addEventListener('click', function(event){
                 event.preventDefault();
                 const playerTwoName = document.getElementById('player-two-name').value;
-                playerTwo = createPlayer(playerTwoName, "O");
+                gameController.playerTwo = createPlayer(playerTwoName, "O");
 
                 const playerTwoContainer = document.querySelector('.player-two');
                 playerTwoContainer.innerHTML = '';
@@ -296,8 +296,5 @@ const displayController = (function(){
                 gameController.startGame();
                 startGameContainer.innerHTML = '';
         });    
-        return {init, handleClick, disableBoard}; 
+        return {init, handleClick, disableBoard, displayResult, resetUI, resetMarkers}; 
 })();
-
-let playerOne;
-let playerTwo;
